@@ -188,77 +188,141 @@
  
   <code id="arduinoCode" class="language-cpp">
 // Collision Warning System with Distance Sensor (HC-SR04)
-// Author: Ana Rodrigues
-// Oct 2, 2025
-// Object is farther than 50cm: Green LED lights up
-// Object is closer than 50 cm, but more than 10cm away: Yellow LED lights, buzzer plays 300Hz tone
-// Object is closer than 10cm: Red LED lights up, buzzer plays 500Hz tone
+// Author: Noah Sanci
+// March 16th 2026
+#include <Servo.h>
+#include <LiquidCrystal.h>
+#include <string.h>
+/** TODO \/ = done
+    * add to author list
+    * Plan how to glue to soccer board
+    * \/ relativize the initial position
+    * \/ verify this even works, need tinkercad
+    * \/ ensure lcd_header is long enough, maybe needs one more space
+ **/
 
-//LED pins
-const int greenLED = 2;
-const int yellowLED = 3;
-const int redLED = 4;
+Servo goalie; // Servo motor controlling the goalie
 
-// Ultrasonic sensor pins
-const int trigPin = 9;
-const int echoPin = 10;
+const int lcd_maxlen = 17; // 16 + 1 to ensure teh string is null terminated
+const char lcd_header[] = "Player    Goalie";
+char lcd_score[lcd_maxlen] = {"\0"};
+const int ascii_0 = 48;
+int player_score = 0;
+int goalie_score = 0;
 
-// Passive buzzer pin
-const int buzzer = 11;
+const int variance = 90;
+const int pos = variance; // initial goalie position indicating noon/ or directly vertical on a two dimensional plain/y-axis
+
+//pins
+const int player_pin = 6;
+const int goalie_pin = 7;
+const int motor_pin = 8;
+LiquidCrystal lcd(12,11,5,4,3,2);
+const int joystick_x = A0; /* analog to be able to get vector from motor*/
+
+/* Need to alter what "pos" is above. ideally pos is set to be directly vertical but I don't know what that is right now */
+const int max_motor_angle =  pos+variance;
+const int min_motor_angle = pos-variance;
+
+/* function headers */
+int set_goalie();
+int set_lcd();
+int set_score();
 
 void setup() {
-  pinMode(greenLED, OUTPUT);
-  pinMode(yellowLED, OUTPUT);
-  pinMode(redLED, OUTPUT);
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
+  pinMode(joystick_x, INPUT);
+  pinMode(player_pin, INPUT);
+  pinMode(goalie_pin,INPUT);
+  goalie.attach(motor_pin);
+  lcd.begin(16,2);
+  lcd.print(lcd_header);
+  set_score();
+  memset(lcd_score, ' ',17);
+  lcd_score[16]='\0';
   Serial.begin(9600);
 }
 
 void loop() {
-  // Measure distance
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-
-  long duration = pulseIn(echoPin, HIGH);
-  long distance = duration * 0.034 / 2;
-
-  Serial.print("Distance: ");
-  Serial.print(distance);
-  Serial.println(" cm");
+  static int goalie_last = 0;
+  static int player_last = 0;
+  int successful_set = set_goalie();
+  int player_button = digitalRead(player_pin);
+  int goalie_button = digitalRead(goalie_pin);
+  if( player_button && player_last == 0){
+    player_score++;
+    player_last = 1;
+  }
+  else if (!player_button&& player_last == 1){
+    player_last = 0;
+  }
+  if(goalie_button && goalie_last == 0){
+    goalie_score++;
+    goalie_last = 1;
+  }
+  else if (!goalie_button && goalie_last ==1){
+    goalie_last = 0;
+  }
+  int victor = set_lcd();
   
-  //Error in measurement:
-  if (distance <= 0)
-    return;
-
-  //Too close:
-  if (distance <= 10) {
-    digitalWrite(greenLED, LOW);
-    digitalWrite(yellowLED, LOW);
-    digitalWrite(redLED, HIGH);
-    tone(buzzer, 500); // Play 500Hz tone
-    return;
+  
+  if (victor == 1){
+    // do a bunch of lcd printing and such
+    lcd.setCursor(0,0);
+    lcd.print("Player win!     ");
+    delay(5000);
+    goalie_score = 0;
+    player_score = 0;
+    victor = 0;
   }
-
-  //Midrange:
-  if (distance <= 30) {
-    digitalWrite(greenLED, LOW);
-    digitalWrite(yellowLED, HIGH);
-    digitalWrite(redLED, LOW);
-    tone(buzzer, 300); // Play 300Hz tone
-    return;
+  if (victor == 2){
+    // do a bunch of lcd printing and such
+    lcd.setCursor(0,0);
+    lcd.print("Goalie win!      ");
+    delay(5000);
+    goalie_score = 0;
+    player_score = 0;
+    victor = 0;
   }
+}
 
-  //Normal status:
-  digitalWrite(greenLED, HIGH);
-  digitalWrite(yellowLED, LOW);
-  digitalWrite(redLED, LOW);
-  noTone(buzzer); // stop buzzer
+int set_goalie(){
+  // get vector from joystick
+  int angle = analogRead(joystick_x);
+  // NEED to relativize the angle to the motor position, need tinkercad inputs and outputs
+  Serial.print(angle);
+  angle = (( (float)angle / 1023) * (variance*2));
+  Serial.print("   ");
+  Serial.println( angle);
+  /* bound the angle by min and max angle */
+  angle = angle < min_motor_angle ? min_motor_angle : angle;
+  angle = angle > max_motor_angle ? max_motor_angle : angle;
+  
+  /* set the angle */
+  goalie.write(angle);
+  
+}
 
-  delay(100);
+int set_lcd(){
+  lcd.setCursor(0,0);
+  lcd.print(lcd_header);
+  lcd.setCursor(0,1);
+  lcd.print(lcd_score);
+  // before settings score
+  if (goalie_score > 9){
+    return 2; // 2 represents goalie victory
+  }
+  else if (player_score > 9){
+    return 1; // 1 represents player victory
+  }
+  set_score();
+  
+  return 0; // 0 represents no victor yet
+}
+
+int set_score(){
+  lcd_score[0] = ascii_0 + player_score; // set first position to show player score
+  lcd_score[lcd_maxlen-2] = ascii_0 + goalie_score; // set last positoin to show goalie score
+  lcd_score[lcd_maxlen-1] = '\0';
 }
     </code>
   </pre>
