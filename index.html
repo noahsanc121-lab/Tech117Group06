@@ -69,9 +69,9 @@
     <p>
    Our designed our project to solve a problem where individuals may want to play soccer however are unable to due to physical or environmental limitations. For our project we will be creating a simulation of a penalty shot game as seen in Maitse's "Arduino Goalkeeper Project.”  
 
-The main portion of the project will initially use an <strong>Arduino Uno, a<strong> KY-023 Joystick module</strong>, and a <strong>Servo Motor</strong>. Player 1 will control the <strong>joystick</strong>, moving it left and right. The <strong>Arduino will then convert these inputs into movement for the <strong>servo motor</strong>, thus moving the goalie into a position that hopefully stops Player 2’s shot on net.
-/* In addition to our main project we designed 
-There are some possible problems that we were worried may arise when constructing our project. The most pressing issue is setting up a reasonable delay for the input of the <strong>servo motor</strong>. Having the delay too short would allow Player 1 to rapidly move the goalie back and forth so quickly that it makes it nearly impossible for Player 2 to score. On the other hand, if the delay for the <strong>server motor</strong> is too long it would give Player 2 an unfair advantage due to delayed reaction time of the goalie. To fix this problem our group has run multiple tests, increasing and decreasing the delay between input and <strong>server motor</strong> movement to maximize fairness for both players. Furthermore, another possible issue we were cautious of was having a faulty goalie design where the <strong>servo motor</strong> wouldn’t be able to support the weight of the goalie or a goalie that wouldn’t withstand the impact of the ball. If the goalie failed in either of these scenarios, it would result in a catastrophic failure because without the goalie, Player 1 is unable to save the shot. In order to resolve this issue, we first opted to use a lighter bristol board, giving the goalie a rigid base needed to stop the ball from entering the net without being so heavy that it would inhibit the motor's movement. In addition, we swapped the original Rubber Ball to a Ping Pong Ball which would stop the goalie from breaking in half when facing the impact of the shot but still allow Player 2 to have an accurate shot.
+The main portion of the project will initially use an <strong>Arduino Uno, a</strong> KY-023 Joystick module</strong>, and a <strong>Servo Motor</strong>. Player 1 will control the <strong>joystick</strong>, moving it left and right. The <strong>Arduino</strong> will then convert these inputs into movement for the <strong>servo motor</strong>, thus moving the goalie into a position that hopefully stops Player 2’s shot on net.
+In addition to our main project we designed 
+There are some possible problems that we were worried may arise when constructing our project. The most pressing issue is setting up a reasonable delay for the input of the <strong>servo motor</strong>. Having the delay too short would allow Player 1 to rapidly move the goalie back and forth so quickly that it makes it nearly impossible for Player 2 to score. On the other hand, if the delay for the <strong>servo motor</strong> is too long it would give Player 2 an unfair advantage due to delayed reaction time of the goalie. To fix this problem our group has run multiple tests, increasing and decreasing the delay between input and <strong>servo motor</strong> movement to maximize fairness for both players. Furthermore, another possible issue we were cautious of was having a faulty goalie design where the <strong>servo motor</strong> wouldn’t be able to support the weight of the goalie or a goalie that wouldn’t withstand the impact of the ball. If the goalie failed in either of these scenarios, it would result in a catastrophic failure because without the goalie, Player 1 is unable to save the shot. In order to resolve this issue, we first opted to use a lighter bristol board, giving the goalie a rigid base needed to stop the ball from entering the net without being so heavy that it would inhibit the motor's movement. In addition, we swapped the original Rubber Ball to a Ping Pong Ball which would stop the goalie from breaking in half when facing the impact of the shot but still allow Player 2 to have an accurate shot.
   </p>
     
  <ul>
@@ -355,67 +355,75 @@ int set_score(){
     <!--  Mayber remove if we don't end up using ultransonic sensors, LEDs, buzzers, etc.-->
     <li>
       Arduino Project Hub. (n.d.). 
-      <em>Ultrasonic sensor projects.</em> 
-      Arduino Project Hub. 
-      <a href="https://projecthub.arduino.cc/projects/tags/ultrasonic-sensor" target="_blank" rel="noopener noreferrer">
-        https://projecthub.arduino.cc/projects/tags/ultrasonic-sensor
-      </a>
-    </li>
-    <li>
-      Arduino Project Hub. (n.d.). 
       <em>Buzzer projects.</em> 
       Arduino Project Hub. 
       <a href="https://create.arduino.cc/projecthub/projects/tags/buzzer" target="_blank" rel="noopener noreferrer">
         https://create.arduino.cc/projecthub/projects/tags/buzzer
       </a>
     </li>
-
-    
     <li>
       Arduino Project Hub. (n.d.). 
       <em>LED projects.</em> 
       Arduino Project Hub. 
       <a href="https://projecthub.arduino.cc/projects/tags/led" target="_blank" rel="noopener noreferrer">
         https://projecthub.arduino.cc/projects/tags/led
-      </a>
+      </a> 
       
   <li>
-    maitse. Arduino Goalkeeper Project, 25 Jan. 2026, projecthub.arduino.cc/maitse_0511/arduino-goalkeeper-project-5aa7b4. 
+    maitse. Arduino Goalkeeper Project, 25 Jan. 2026, 
+    <a href= "projecthub.arduino.cc/maitse_0511/arduino-goalkeeper-project-5aa7b4" target="_blank" rel="noopener noreferrer">
+      projecthub.arduino.cc/maitse_0511/arduino-goalkeeper-project-5aa7b4
+    </a>
   </li>
   <li>
-    HAMZA681, and Instructables. “E-Staduim Game Using Arduino.” Instructables, Instructables, 25 Apr. 2022, www.instructables.com/E-STADUIM-GAME-USING-ARDUINO/. 
+    HAMZA681, and Instructables. “E-Staduim Game Using Arduino.” Instructables, Instructables, 25 Apr. 2022,
+    <a href="www.instructables.com/E-STADUIM-GAME-USING-ARDUINO/" target="_blank" rel="noopener noreferrer">
+    www.instructables.com/E-STADUIM-GAME-USING-ARDUINO/ 
+    </a>
   </li>
   <li>
-    EAZYTRONIC. “Joystick Controlled Goalkeeper Game || How To  Control Servo Motor With Joystick Module.” YouTube, YouTube, 25 Jan. 2026, www.youtube.com/watch?v=4KwaAz_zhmw.
+    EAZYTRONIC. “Joystick Controlled Goalkeeper Game || How To  Control Servo Motor With Joystick Module.” YouTube, YouTube, 25 Jan. 2026, 
+    <a href="www.youtube.com/watch?v=4KwaAz_zhmw" target="_blank" rel="noopener noreferrer">
+    www.youtube.com/watch?v=4KwaAz_zhmw
+    </a>
+
   </li>
-    </li>
-
-    <li>
-      Instructables. (n.d.). 
-      <em>Distance measurement using ultrasonic sensor.</em> 
-      Instructables. 
-      <a href="https://www.instructables.com/Arduino-Distance-Measurement-Using-Ultrasonic-Senso/" target="_blank" rel="noopener noreferrer">
-        https://www.instructables.com/Arduino-Distance-Measurement-Using-Ultrasonic-Senso/
+  <li>
+    Arduino Goalkeeper Project. (2026). Arduino Project Hub. 
+      <a href="https://projecthub.arduino.cc/maitse_0511/arduino-goalkeeper-project-5aa7b4" target="_blank" rel="noopener noreferrer">
+        https://projecthub.arduino.cc/maitse_0511/arduino-goalkeeper-project-5aa7b4
       </a>
-    </li>
-
-    <li>
-      Circuit Basics. (n.d.). 
-      <em>How to use an ultrasonic sensor with Arduino.</em> 
-      Circuit Basics. 
-      <a href="https://www.circuitbasics.com/how-to-use-an-ultrasonic-sensor-with-arduino/" target="_blank" rel="noopener noreferrer">
-        https://www.circuitbasics.com/how-to-use-an-ultrasonic-sensor-with-arduino/
+  </li>
+  <li>
+‌     Instructables. (2022, March 4). E-STADUIM GAME USING ARDUINO. Instructables. 
+      <a href="https://www.instructables.com/E-STADUIM-GAME-USING-ARDUINO"  target="_blank" rel="noopener noreferrer">
+        https://www.instructables.com/E-STADUIM-GAME-USING-ARDUINO
       </a>
-    </li>
-
-    <li>
-      Last Minute Engineers. (n.d.). 
-      <em>Ultrasonic sensor tutorial.</em> 
-      Last Minute Engineers. 
-      <a href="https://lastminuteengineers.com/ultrasonic-sensor-arduino-tutorial/" target="_blank" rel="noopener noreferrer">
-        https://lastminuteengineers.com/ultrasonic-sensor-arduino-tutorial/
-      </a>
-    </li>
+  </li>
+  <li>
+    Roboarmy. (2025, December 28). Joystick-Controlled Football Goalkeeper | Arduino + Servo Motor. YouTube. 
+    <a href="https://www.youtube.com/watch?v=q76PIt1Z_8E"  target="_blank" rel="noopener noreferrer">
+      https://www.youtube.com/watch?v=q76PIt1Z_8E
+    </a>
+  </li>
+  <li>
+    Using joystick module with Arduino. (2022). Arduino Project Hub. 
+    <a href="https://projecthub.arduino.cc/hibit/using-joystick-module-with-arduino-0ffdd4" target="_blank" rel="noopener noreferrer">
+      https://projecthub.arduino.cc/hibit/using-joystick-module-with-arduino-0ffdd4
+    </a>
+  </li>
+  <li>
+    How to control servo motor using analog joystick and Arduino. (2025). Arduino Project Hub. 
+    <a href="https://projecthub.arduino.cc/webotricks/how-to-control-servo-motor-using-analog-joystick-and-arduino-edf9f6"  target="_blank" rel="noopener noreferrer">
+      https://projecthub.arduino.cc/webotricks/how-to-control-servo-motor-using-analog-joystick-and-arduino-edf9f6
+    </a>
+  </li>
+  <li>
+    DuoScore: A Digital Scoreboard with LCD Display for Two-Player Games. (2024). Arduino Project Hub. 
+    <a href="https://projecthub.arduino.cc/rom4incogn1to/duoscore-a-digital-scoreboard-with-lcd-display-for-two-player-games-ae7593"   target="_blank" rel="noopener noreferrer">
+      https://projecthub.arduino.cc/rom4incogn1to/duoscore-a-digital-scoreboard-with-lcd-display-for-two-player-games-ae7593
+    </a>
+  </li>
   </ul>
 </section>
 
