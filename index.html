@@ -255,25 +255,22 @@
       <pre class="line-numbers">
  
   <code id="arduinoCode" class="language-cpp">
-// Collision Warning System with Distance Sensor (HC-SR04)
-// Author: Noah Sanci
+// Suii Saver
+// Author: Abdirahim Mohamed, Filip Lukic, Noah Sanci, Sumit Ganger
 // March 16th 2026
 #include <"Servo.h">
 #include <"LiquidCrystal.h">
 #include <"string.h">
-/** TODO \/ = done
-    * add to author list
-    * Plan how to glue to soccer board
-    * \/ relativize the initial position
-    * \/ verify this even works, need tinkercad
-    * \/ ensure lcd_header is long enough, maybe needs one more space
- **/
 
 Servo goalie; // Servo motor controlling the goalie
 
 const int lcd_maxlen = 17; // 16 + 1 to ensure teh string is null terminated
 const char lcd_header[] = "Player    Goalie";
+// lcd_score set to null as a safety precaution
 char lcd_score[lcd_maxlen] = {"\0"};
+const int goal_max = 5;
+// ascii 0 character that we can add to get the character version of a number
+// e.g ascii_0 + 7 = '7'
 const int ascii_0 = 48;
 int player_score = 0;
 int goalie_score = 0;
@@ -281,11 +278,12 @@ int goalie_score = 0;
 const int variance = 90;
 const int pos = variance; // initial goalie position indicating noon/ or directly vertical on a two dimensional plain/y-axis
 
-//pins
+//digital pins
 const int player_pin = 6;
 const int goalie_pin = 7;
 const int motor_pin = 8;
 LiquidCrystal lcd(12,11,5,4,3,2);
+const int buzzer_pin = 13;
 const int joystick_x = A0; /* analog to be able to get vector from motor*/
 
 /* Need to alter what "pos" is above. ideally pos is set to be directly vertical but I don't know what that is right now */
@@ -295,61 +293,89 @@ const int min_motor_angle = pos-variance;
 /* function headers */
 int set_goalie();
 int set_lcd();
-int set_score();
+void set_score();
+void buzzer();
+void reset_game();
 
 void setup() {
-  pinMode(joystick_x, INPUT);
-  pinMode(player_pin, INPUT);
-  pinMode(goalie_pin,INPUT);
-  goalie.attach(motor_pin);
+    /* setup pins */
+  pinMode(joystick_x, INPUT); // setup joystick pin for input
+  pinMode(player_pin, INPUT_PULLUP); // setup player pin as a pullup input
+  pinMode(goalie_pin,INPUT_PULLUP); // setup goalie pin as a pullup input
+  pinMode(buzzer_pin, OUTPUT); // setup buzzer pin to be output
+  goalie.attach(motor_pin); // attach the goalie servo motor structure to the analog motor pin
+  // setup the 16x2 lcd
   lcd.begin(16,2);
-  lcd.print(lcd_header);
-  set_score();
+  lcd.print(lcd_header); // print the default header to the screen
+  reset_game(); // ensure the scores are zero
+  set_score(); // update the score string with the 0-0 score
+  // ensure lcd_score is filled with spaces so the lcd displays nothing and
+  // null terminate the string
   memset(lcd_score, ' ',17);
   lcd_score[16]='\0';
-  Serial.begin(9600);
+  Serial.begin(9600); // start the arduino
 }
 
 void loop() {
-  static int goalie_last = 0;
-  static int player_last = 0;
+  /* goalie_last and player_last are used to determine if a button has been pressed and to prevent
+  multiple goals in the same button press.*/
+  static int goalie_last = 1;
+  static int player_last = 1;
+  // set goalie's positoin based on joystick
   int successful_set = set_goalie();
+  // get button input
   int player_button = digitalRead(player_pin);
   int goalie_button = digitalRead(goalie_pin);
-  if( player_button && player_last == 0){
+
+  /* if the player goal button is pressed and the button hasn't been pressed recently*/
+  if( !player_button && player_last == 0){
+    // update player score and flag the button as being pressed
     player_score++;
     player_last = 1;
   }
-  else if (!player_button&& player_last == 1){
+  // if the button is unpressed and is flagged as being pressed recently
+  else if (player_button&& player_last == 1){
+    // unflag the button as being pressed
     player_last = 0;
   }
-  if(goalie_button && goalie_last == 0){
+  /* if the goalie goal button is pressed and the button hasn't been pressed recently*/
+  if(!goalie_button && goalie_last == 0){
+    // update the goalie score and flag the button as being pressed
     goalie_score++;
     goalie_last = 1;
   }
-  else if (!goalie_button && goalie_last ==1){
+  // if the button is unpressed and is flagged as being pressed recently
+  else if (goalie_button && goalie_last == 1){
+    // unflag the button as being pressed
     goalie_last = 0;
   }
+   // update the score string after potentially incrementing the score in the above if statements
+  set_score();
+  
+  // Set the lcd and detect if there is a victor
   int victor = set_lcd();
-  
-  
+
+  // if the player has won, signalled by a 1 from set_lcd()
   if (victor == 1){
-    // do a bunch of lcd printing and such
+    // update the lcd to indicate the player has won
     lcd.setCursor(0,0);
     lcd.print("Player win!     ");
-    delay(5000);
-    goalie_score = 0;
-    player_score = 0;
-    victor = 0;
+    // sound the buzzer and delay
+    buzzer();
+    delay(2000); // delay for 2 seconds
+    reset_game(); // set both scores to zero
+    victor = 0; // signal there's no victor
   }
+  // if the goalie has won, signalled by a 2 from set_lcd()
   if (victor == 2){
-    // do a bunch of lcd printing and such
+    // update the lcd to indicate the goalie has won
     lcd.setCursor(0,0);
     lcd.print("Goalie win!      ");
-    delay(5000);
-    goalie_score = 0;
-    player_score = 0;
-    victor = 0;
+    // sound the buzzer and delay
+    buzzer();
+    delay(2000); // delay for 2 seconds
+    reset_game(); // set both scores to 0
+    victor = 0; // signal there's no victor
   }
 }
 
@@ -362,36 +388,61 @@ int set_goalie(){
   Serial.print("   ");
   Serial.println( angle);
   /* bound the angle by min and max angle */
+  // "if the angle is less than min_motor_angle then set angle to min_motor-angle, otherwise set angle to itself"
   angle = angle < min_motor_angle ? min_motor_angle : angle;
+  // "if the angle is more than max_motor_angle then set angle to max_motor-angle, otherwise set angle to itself"
   angle = angle > max_motor_angle ? max_motor_angle : angle;
-  
-  /* set the angle */
+
+  /* tell the motor what angle it's supposed to be at */
   goalie.write(angle);
-  
 }
 
 int set_lcd(){
+  // set the cursor to the top row
   lcd.setCursor(0,0);
+  // write the lcd header to the lcd
   lcd.print(lcd_header);
+  // set the cursor to the bottom row
   lcd.setCursor(0,1);
+  // write the score to the lcd
   lcd.print(lcd_score);
   // before settings score
-  if (goalie_score > 9){
+  if (goalie_score >= goal_max){
     return 2; // 2 represents goalie victory
   }
-  else if (player_score > 9){
+  else if (player_score >= goal_max){
     return 1; // 1 represents player victory
   }
-  set_score();
-  
+
   return 0; // 0 represents no victor yet
 }
 
-int set_score(){
+// change the string that set_lcd() displays to the lcd. 
+void set_score(){
   lcd_score[0] = ascii_0 + player_score; // set first position to show player score
   lcd_score[lcd_maxlen-2] = ascii_0 + goalie_score; // set last positoin to show goalie score
-  lcd_score[lcd_maxlen-1] = '\0';
+  lcd_score[lcd_maxlen-1] = '\0';// null terminate no matter what
 }
+
+// resets the game's score to zero, the default loop() will quickly display it
+void reset_game(){
+    goalie_score = 0;
+    player_score = 0;
+}
+
+/* sounds the buzzer for 1 second*/
+void buzzer(){
+  /* play a short tune for the victor */
+  tone(buzzer_pin, 700, 1000);
+  delay(300);
+  tone(buzzer_pin, 900, 1000);
+  delay(300);
+  tone(buzzer_pin, 1100, 1000);
+  delay(500);
+  // stop the tune
+  noTone(buzzer_pin);
+}
+
     </code>
   </pre>
 
