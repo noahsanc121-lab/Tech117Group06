@@ -66,14 +66,20 @@
 
   <section id="introduction">
     <h2>Introduction</h2>
-    <p>
-   Our designed our project to solve a problem where individuals may want to play soccer however are unable to due to physical or environmental limitations. For our project we will be creating a simulation of a penalty shot game as seen in Maitse's "Arduino Goalkeeper Project.”  
+    <p> When designing our project, we decided to focus on <strong>goal 10 “Reduce inequality within and among countries”</strong> from the 17 goals listed by the United Nations’ “The Sustainable Development Goals”. Our project is designed to solve a problem where individuals may want to play soccer however are unable to, due to physical or environmental limitations. For our project we will be creating a simulation of a two player penalty shot game as seen in Maitse's "Arduino Goalkeeper Project.” </p>
 
-The main portion of the project will initially use an <strong>Arduino Uno, a</strong> KY-023 Joystick module</strong>, and a <strong>Servo Motor</strong>. Player 1 will control the <strong>joystick</strong>, moving it left and right. The <strong>Arduino</strong> will then convert these inputs into movement for the <strong>servo motor</strong>, thus moving the goalie into a position that hopefully stops Player 2’s shot on net.
-In addition to our main project we designed 
-There are some possible problems that we were worried may arise when constructing our project. The most pressing issue is setting up a reasonable delay for the input of the <strong>servo motor</strong>. Having the delay too short would allow Player 1 to rapidly move the goalie back and forth so quickly that it makes it nearly impossible for Player 2 to score. On the other hand, if the delay for the <strong>servo motor</strong> is too long it would give Player 2 an unfair advantage due to delayed reaction time of the goalie. To fix this problem our group has run multiple tests, increasing and decreasing the delay between input and <strong>servo motor</strong> movement to maximize fairness for both players. Furthermore, another possible issue we were cautious of was having a faulty goalie design where the <strong>servo motor</strong> wouldn’t be able to support the weight of the goalie or a goalie that wouldn’t withstand the impact of the ball. If the goalie failed in either of these scenarios, it would result in a catastrophic failure because without the goalie, Player 1 is unable to save the shot. In order to resolve this issue, we first opted to use a lighter bristol board, giving the goalie a rigid base needed to stop the ball from entering the net without being so heavy that it would inhibit the motor's movement. In addition, we swapped the original Rubber Ball to a Ping Pong Ball which would stop the goalie from breaking in half when facing the impact of the shot but still allow Player 2 to have an accurate shot.
-  </p>
-    
+      <p> The main portion of the project will initially use a <strong>Breadboard</strong> and attach an <strong>Arduino Uno</strong>, <strong> KY-023 Joystick module</strong>, and a <strong>Servo Motor</strong>. Player 1 will control the <strong>joystick</strong>, moving it left and right. The <strong>arduino</strong> will then convert these inputs into movement for the <strong>servo motor</strong>, thus moving the goalie into a position that hopefully stops Player 2’s shot on net.</p>
+
+      <p> In addition to our main project, we designed two extensions which would add more depth to our simulation. To complete these extensions we expanded our part’s list by adding a <strong>Breadboard-Mini</strong>, <strong>Liquid Crystal Display (LCD)</strong>,<strong>Buzzer</strong>, and <strong>Push Buttons</strong>. </p>
+      <p>Similarly to a real life soccer game we wanted to have a medium to display the current score of the game and signify the end of the game. We attached two <strong>push buttons</strong>, one to add one point to “Player” and one to add one point to “Goalie”. To turn these inputs into something the players can see, we used a <strong>LCD</strong> to display the score for both the Player 2 shooting labeled “Player” and Player 1 labeled as “Goalie”. Finally, to announce the end of the game we attached a <strong>buzzer</strong> to the circuit. Our group adjusted our code to activate the <strong>buzzer</strong>  when one player reaches five points, while displaying which player won the game.</p>
+
+      <p> Combining all of these concepts, we created an interactive penalty shot simulator that tracks points for each player and announces the end of the game when one player wins. If everything works as planned then the desired simulation will function as follows; Player 2 will flick the ball using their finger, then using the <strong>joystick</strong> Player 1 will control the goalie moving it side to side to stop the ball from entering the net, depending on the outcome of the shot one player will have 1 point added to their total score using the designated <strong>push button</strong>, the input of the <strong>push button</strong> would then be displayed on the <strong>LCD</strong>, lastly when the score limit of five is reached by either player the <strong>buzzer</strong> will active and the <strong>LCD</strong> will display the player who won, signifying the end of the game.</p>
+
+      <p> There are some possible problems that we were worried may arise when constructing our project. The most pressing issue is setting up a reasonable delay for the input of the <strong>servo motor</strong>. Having the delay too short would allow Player 1 to rapidly move the goalie back and forth so quickly that it makes it nearly impossible for Player 2 to score. On the other hand, if the delay for the <strong>servo motor</strong> is too long it would give Player 2 an unfair advantage due to delayed reaction time of the goalie. To fix this problem our group has run multiple tests, increasing and decreasing the delay between input and <strong>servo motor</strong> movement to maximize fairness for both players. </p>
+
+      <p> Furthermore, another possible issue we were cautious of was having a faulty goalie design where the <strong>servo motor</strong> wouldn’t be able to support the weight of the goalie or a goalie that wouldn’t withstand the impact of the ball. If the goalie failed in either of these scenarios, it would result in a catastrophic failure because without the goalie, Player 1 is unable to save the shot. In order to resolve this issue, we first opted to use a lighter bristol board, giving the goalie a rigid base needed to stop the ball from entering the net without being so heavy that it would inhibit the <strong>servo motor's</strong> movement. </p>
+      <p> Finally, an issue we were mindful of was having a messy <strong>breadboard</strong> making it hard to use the <strong>push buttons</strong> without disconnecting the wires plugged into the <strong>breadboard</strong>. To remedy this issue we chose to separate our <strong>push buttons</strong> from the rest of our project by using a <strong>breadboard-mini</strong>. Using this <strong>breadboard-mini</strong> we are able to move the <strong>push buttons</strong> into a position that was easier to reach for the players while also having less wires in the way thus reducing the possibility the project would be ruined by someone accidentally unplugging a wire from the main <strong>breadboard</strong>.</p>
+   
  <ul>
   </ul>
   </section>
@@ -82,19 +88,18 @@ There are some possible problems that we were worried may arise when constructin
     <h2>Circuit Diagram</h2>
     <p>The ultrasonic sensor measures distance; the Arduino activates LEDs and the buzzer according to distance
       thresholds.</p>
-    <img src="collision-warning-system-Arduino.jpg" alt="Arduino collision warning system">
+    <img src="autocad.png" alt="Arduino collision warning system">
   </section>
 
   <section id="environment">
     <h2>Environmental Impact Assessment</h2>
     <ul>
-      <li><strong>Materials:</strong> The Arduino Uno is RoHS and WEEE compliant, limiting hazardous substances.
+      <li><strong>Materials:</strong> The Arduino Uno is RoHS and WEEE compliant, limiting hazardous substances. Despite battery's having hazardous material 
       </li>
       <li><strong>Energy Efficiency:</strong> The circuit draws minimal power (~50 mA at 5V), ideal for USB or
         solar power.</li>
       <li><strong>Reusability:</strong> All components are modular and reusable, reducing electronic waste.</li>
-      <li><strong>Packaging & Shipping:</strong> Ordering all components from a single supplier helps minimize
-        carbon footprint.</li>
+      <li><strong>Packaging & Shipping:</strong> Components are all ordered from separate vendors, increasing the amount of packaging necessary. Forunately, the field itself is created out of cardboard, and a single package may not give the amount of usable cardboard necessary to create the field. So the creation of the field itself utilizes what would otherwise be excess cardboard, reducing waste. This responsible consumption of resources aligns with U.N goal 12 of "Responsible Consumption and Production" (United Nations, (n.d)).</li>
     </ul>
   </section>
 
@@ -144,7 +149,14 @@ There are some possible problems that we were worried may arise when constructin
           <td>1</td>
           <td>$0.15</td>
           <td>$0.15</td>
-          <td><a href="https://www.pishop.ca/product/resistor-220-ohm-14w-5-axial-pack-of-10/">Digikey</a></td>
+          <td><a href="https://www.pishop.ca/product/resistor-220-ohm-14w-5-axial-pack-of-10/">Pishop</a></td>
+        </tr>
+        <tr>
+          <td>10000 Ω Resistors</td>
+          <td>2</td>
+          <td>$0.25</td>
+          <td>$0.50</td>
+          <td><a href="https://www.pishop.ca/product/through-hole-resistors-10k-ohm-5-1-4w-pack-of-25/">Pishop</a></td>
         </tr>
         <tr>
           <td>Breadboard</td>
@@ -219,7 +231,7 @@ There are some possible problems that we were worried may arise when constructin
       <tfoot>
         <tr>
           <td colspan="3">Estimated Total</td>
-          <td>$41.22</td>
+          <td>$41.72</td>
         </tr>
       </tfoot>
     </table>
@@ -233,7 +245,7 @@ There are some possible problems that we were worried may arise when constructin
 
   <section id="code">
     <h2>Arduino Code</h2>
-    <p>The following Arduino code controls the system, lighting LEDs and activating the buzzer based on distance readings from the HC-SR04 sensor.</p>
+    <p>The following Arduino code controls the system, displaying goal information on the 16x2 lcd, taking joystick input and rerouting it to the goalie motor, taking button input to increment the score, and activating the buzzer when a winner is decided.</p>
 <div class="code-container" style="position: relative;">
       <button class="copy-btn" onclick="copyCode()" 
               style="position:absolute; top:8px; right:8px; z-index:10;">
@@ -476,6 +488,9 @@ int set_score(){
     <a href="https://projecthub.arduino.cc/rom4incogn1to/duoscore-a-digital-scoreboard-with-lcd-display-for-two-player-games-ae7593"   target="_blank" rel="noopener noreferrer">
       https://projecthub.arduino.cc/rom4incogn1to/duoscore-a-digital-scoreboard-with-lcd-display-for-two-player-games-ae7593
     </a>
+  </li>
+  <li>
+  United Nations. (n.d.). Goal 12 | Department of Economic and Social Affairs. United Nations. <a href="https://sdgs.un.org/goals/goal12">https://sdgs.un.org/goals/goal12</a>
   </li>
   </ul>
 </section>
