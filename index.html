@@ -384,11 +384,8 @@ void loop() {
 int set_goalie(){
   // get vector from joystick
   int angle = analogRead(joystick_x);
-  // NEED to relativize the angle to the motor position, need tinkercad inputs and outputs
-  Serial.print(angle);
+  // relativizes the angle to the motor position
   angle = (( (float)angle / 1023) * (variance*2));
-  Serial.print("   ");
-  Serial.println( angle);
   /* bound the angle by min and max angle */
   // "if the angle is less than min_motor_angle then set angle to min_motor-angle, otherwise set angle to itself"
   angle = angle < min_motor_angle ? min_motor_angle : angle;
