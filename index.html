@@ -369,7 +369,7 @@ void loop() {
     victor = 0; // signal there's no victor
   }
   // if the goalie has won, signalled by a 2 from set_lcd()
-  if (victor == 2){
+  else if (victor == 2){
     // update the lcd to indicate the goalie has won
     lcd.setCursor(0,0);
     lcd.print("Goalie win!      ");
